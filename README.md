@@ -16,4 +16,5 @@ A simple discord bot that it's entire goal is to produce local transcriptions fo
 # Help
 
 A :fire: reaction will regenerate the transcription with auto language detection
+
 A country flag emoji will regenerate the transcription with the reacted language
