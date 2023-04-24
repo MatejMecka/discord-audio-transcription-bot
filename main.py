@@ -26,17 +26,28 @@ async def on_message_create(event):
     """
     Here we are checking for every new single message and transcribing them accordingly
     """
+    message = event.message
+    # Check if we have been mentioned
+    mentions = event.message.mention_users
+    async for mention in mentions:
+        if mention.id == bot.user.id:
+            # Check if it's a reply
+            original_message = await event.message.fetch_referenced_message()
+            if original_message is not None:
+                message = original_message
+
     # Check if we have attachments
-    if event.message.attachments == []:
+    if message.attachments == []:
         return
 
-    if len(event.message.attachments) != 1:
+    if len(message.attachments) != 1:
         return
 
-    if not 'voice-message.ogg' in event.message.attachments[0].url:
+    if not 'voice-message.ogg' in message.attachments[0].url:
         return
 
-    await transcribe(FILE_URL=event.message.attachments[0].url, ORIGINAL_MESSAGE=event.message, REGENERATE=False)
+    print(message.attachments[0].url)
+    await transcribe(FILE_URL=message.attachments[0].url, ORIGINAL_MESSAGE=message, REGENERATE=False)
 
 @interactions.listen()
 async def on_message_reaction_add(reaction):
